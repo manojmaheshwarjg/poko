@@ -8,6 +8,133 @@ acts. Sekva was the working name, and parts of the docs and code still use it.
 See [PLAN.md](PLAN.md) for the thesis, the business model and the phase plan, and
 [DESIGN.md](DESIGN.md) for the learning guarantees and the status of each phase.
 
+## How it works
+
+Four pictures: what runs where, how a user is guided, how Poko learns, and what a vendor
+does to set it up.
+
+### What runs where
+
+```mermaid
+flowchart TB
+  user(["A new user"])
+  vendor(["The vendor's team"])
+
+  subgraph browser["In the browser, inside the vendor's product"]
+    direction TB
+    panel["Poko panel<br/>the goal, the steps,<br/>the approvals"]
+    engine["Engine<br/>observe, locate,<br/>highlight, act"]
+    capture["Capture<br/>record, redact,<br/>upload"]
+  end
+
+  subgraph service["Service"]
+    direction TB
+    api["API<br/>plan, repair,<br/>wayfind, ingest"] --> db[("Database<br/>screens, routes,<br/>struggles")]
+    learning["Learning pipeline<br/>screens, routes,<br/>verification"] <--> db
+    console["Console<br/>map, routes,<br/>struggles, runs"] <--> db
+  end
+
+  subgraph outside["Outside"]
+    direction TB
+    model["Model provider"]
+    docs["Vendor docs"]
+  end
+
+  user -->|asks for help| browser
+  vendor -->|reviews, verifies, releases| service
+  browser -->|the goal and live screen,<br/>redacted moves| service
+  service -->|calls the model,<br/>crawls docs on request| outside
+```
+
+- The engine and the panel are plain JavaScript (`core/`, `panel/`). The service is a
+  Next.js app with SQLite (`service/`). The model is called only from the service.
+- Nothing acts on the product without a person approving that step, and nothing learned
+  is used until it passes verification. DESIGN.md lists all eleven guarantees.
+- The landing page (`site/`) stands apart: it is scripted, calls no model, and sends
+  early-access signups to `EARLY_ACCESS_WEBHOOK_URL`.
+
+### How a user is guided
+
+```mermaid
+sequenceDiagram
+  actor User
+  participant Panel as Poko panel
+  participant Page as Product page
+  participant Service
+  participant Model
+
+  User->>Panel: Types a goal and presses Plan
+  Panel->>Service: The goal and the live screen
+  Service->>Model: The screen, the docs and verified routes as hints
+  Model-->>Service: A plan, a partial plan, nothing to do, or cannot
+  Service-->>Panel: The steps, or why it can't
+  loop Every step
+    Panel->>Page: Find the target and highlight it
+    Panel-->>User: Show what the step will change
+    alt Approve
+      User->>Panel: Approve
+      Panel->>Page: Act, then look at the page again
+    else Skip
+      User->>Panel: Skip
+    end
+  end
+  Panel->>Service: Every approve, skip and repair, redacted
+  Note over User,Page: If the target can't be found, Ask copilot repairs that one step.<br/>If the page is the wrong one, Take me there follows the way people go, without a model.
+```
+
+The live screen goes to the model only when someone presses Plan or Ask copilot.
+Background learning sends only redacted moves: typed values never leave the browser, and
+on customer installs, labels are hashed unless they are plainly part of the interface.
+
+### How Poko learns
+
+```mermaid
+flowchart LR
+  subgraph browser["1 In the browser"]
+    direction TB
+    use["People use the product"] --> capture["Capture each move<br/>screen, action, next screen"] --> redact["Redact<br/>typed values never leave"]
+  end
+
+  subgraph server["2 On the server"]
+    direction TB
+    ingest["Ingest<br/>checked again, then stored"] --> screens["Screens<br/>group pages that look alike"] --> mine["Mine<br/>routes and struggle points"] --> label["Label<br/>the model names each route"]
+  end
+
+  subgraph gate["3 Before anything is used"]
+    direction TB
+    verify{"Can the planner<br/>redo the route cold?"}
+    verify -->|yes| offer["Offered to the planner<br/>as a hint"]
+    verify -->|no| gap["Recorded as a gap"]
+    offer -->|needs a repair or<br/>is rejected in use| demote["Demoted"]
+    offer -->|an evaluation gets<br/>worse with it| held["Held back"]
+  end
+
+  browser --> server --> gate
+```
+
+Poko learns only from people, never from its own runs, and evidence older than 90 days
+(by default) stops counting, so what it knows follows the product's releases.
+
+### What a vendor does
+
+```mermaid
+flowchart TB
+  add["Add the product<br/>and point Poko at its docs"] --> install["Install Poko in the app<br/>and enroll browsers with a code"]
+  install --> explore["Optional: explore the screens<br/>read-only, never clicks"]
+  install --> learn["People use the product<br/>Poko learns in the background"]
+  explore --> review["Review in the console<br/>the map, routes and struggles"]
+  learn --> review
+  review --> verify["Verify routes<br/>paid, needs your tick"]
+  verify --> compare["Compare with and without them<br/>paid, queued"]
+  compare -->|no worse| live["Routes go live<br/>new users get guided"]
+  compare -->|worse| held["Routes held back"]
+  live --> struggles["Struggles show up"]
+  struggles -->|new test case or docs note| review
+```
+
+Every paid step shows its exact number of model calls and runs only after you tick it.
+Until the installable SDK lands, the dev harness stands in for the install (see below).
+
 ## Repository layout
 
 | Folder | What it is |
