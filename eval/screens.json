@@ -1,0 +1,216 @@
+{
+  "board": {
+    "screen": {
+      "screen": "project",
+      "heading": "Board",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "navigation",
+        "name": "Payments"
+      },
+      {
+        "role": "link",
+        "name": "Backlog"
+      },
+      {
+        "role": "link",
+        "name": "Board"
+      },
+      {
+        "role": "link",
+        "name": "Issues"
+      },
+      {
+        "role": "link",
+        "name": "Project settings"
+      },
+      {
+        "role": "heading",
+        "name": "Board"
+      }
+    ]
+  },
+  "project-settings": {
+    "screen": {
+      "screen": "project-settings",
+      "heading": "Project settings",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "link",
+        "name": "Project settings"
+      },
+      {
+        "role": "heading",
+        "name": "Project settings"
+      },
+      {
+        "role": "link",
+        "name": "Details"
+      },
+      {
+        "role": "link",
+        "name": "Access"
+      },
+      {
+        "role": "link",
+        "name": "Permissions"
+      },
+      {
+        "role": "link",
+        "name": "Notifications"
+      }
+    ]
+  },
+  "permissions": {
+    "screen": {
+      "screen": "permissions",
+      "heading": "Permissions",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "link",
+        "name": "Project settings"
+      },
+      {
+        "role": "heading",
+        "name": "Permissions"
+      },
+      {
+        "role": "button",
+        "name": "Actions",
+        "state": {
+          "expanded": false
+        }
+      }
+    ]
+  },
+  "edit-permissions": {
+    "screen": {
+      "screen": "edit-permissions",
+      "heading": "Edit permissions",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "heading",
+        "name": "Edit permissions"
+      },
+      {
+        "role": "checkbox",
+        "name": "Browse projects for Developers",
+        "state": {
+          "checked": true
+        }
+      },
+      {
+        "role": "checkbox",
+        "name": "Browse projects for Contractors",
+        "state": {
+          "checked": true
+        }
+      },
+      {
+        "role": "checkbox",
+        "name": "Edit issues for Developers",
+        "state": {
+          "checked": true
+        }
+      },
+      {
+        "role": "checkbox",
+        "name": "Edit issues for Contractors",
+        "state": {
+          "checked": true
+        }
+      },
+      {
+        "role": "checkbox",
+        "name": "Delete issues for Developers",
+        "state": {
+          "checked": true
+        }
+      },
+      {
+        "role": "checkbox",
+        "name": "Delete issues for Contractors",
+        "state": {
+          "checked": false
+        }
+      }
+    ]
+  },
+  "permissions-menu-open": {
+    "screen": {
+      "screen": "permissions",
+      "heading": "Permissions",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "link",
+        "name": "Project settings"
+      },
+      {
+        "role": "heading",
+        "name": "Permissions"
+      },
+      {
+        "role": "button",
+        "name": "Actions",
+        "state": {
+          "expanded": true
+        }
+      },
+      {
+        "role": "menuitem",
+        "name": "Edit permissions"
+      },
+      {
+        "role": "menuitem",
+        "name": "Use a different scheme"
+      },
+      {
+        "role": "menuitem",
+        "name": "Copy scheme"
+      }
+    ]
+  },
+  "access": {
+    "screen": {
+      "screen": "access",
+      "heading": "Access",
+      "title": "Mock Jira"
+    },
+    "nodes": [
+      {
+        "role": "link",
+        "name": "Project settings"
+      },
+      {
+        "role": "heading",
+        "name": "Access"
+      },
+      {
+        "role": "button",
+        "name": "Add people"
+      },
+      {
+        "role": "button",
+        "name": "Remove Administrators"
+      },
+      {
+        "role": "button",
+        "name": "Remove Developers"
+      },
+      {
+        "role": "button",
+        "name": "Remove Contractors"
+      }
+    ]
+  }
+}

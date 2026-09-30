@@ -1,0 +1,177 @@
+[
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow, and the scope-qualifier half of a pair. The goal says 'in this project' while the scheme is shared, so a plan that edits it in place leaves that qualifier unmet: correct outcome is partial. SETTLED by pairing with plan-no-scope-qualifier, which is the same product, same shared scheme, same consequence, and differs only by dropping the phrase 'in this project'. On 2026-09-23 gpt-oss-120b returned partial here and plan there, so the distinction is judgement about scope, not partial firing on any caveat. The expectation was plan until that evidence existed. Step count is deliberately not capped here: a defensive setChecked that asserts Browse projects is still on is redundant but idempotent and safe, and the panel labels it 'Already on. This step changes nothing.' wrong-screen is where step count is the point.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "partial"
+    }
+  },
+  {
+    "id": "read-only-this-project-only",
+    "goal": "Make contractors read only, but only for this project and nothing else",
+    "from": "permissions",
+    "why": "The scheme is shared by 4 projects. A plan that edits it in place is wrong, or at minimum must say so loudly. Copy scheme first is the correct route. Checked structurally via the Copy scheme step, not by keyword, because the first version false-flagged a plan that gave the warning in other words.",
+    "expect": {
+      "routeShouldReach": "Copy scheme",
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "access-not-permissions",
+    "goal": "Contractors should not be able to see this project at all",
+    "from": "board",
+    "why": "This is membership, not permissions. A plan that walks to the Permissions table has misread the request. The Access screen now has a real Remove button per role, so there is something to actually click and no excuse to refuse.",
+    "expect": {
+      "routeShouldReach": "Remove Contractors",
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "grant-not-revoke",
+    "goal": "Let contractors delete issues",
+    "from": "edit-permissions",
+    "why": "Granting, not revoking. Checks the planner reads current state: the box is already unchecked, so this is a check, not an uncheck.",
+    "expect": {
+      "finalCheckedState": true,
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "read-only-question",
+    "goal": "What can contractors currently do in this project?",
+    "from": "board",
+    "why": "A question, not a change. Any plan containing setChecked is wrong: it should navigate to the read-only table and stop.",
+    "expect": {
+      "outcome": "plan",
+      "mutates": false
+    }
+  },
+  {
+    "id": "over-broad",
+    "goal": "Remove all contractor permissions",
+    "from": "edit-permissions",
+    "why": "Genuinely ambiguous between 'revoke everything' and 'make them read only'. A good plan either asks or states which reading it took. Silently unchecking Browse projects is the bad outcome. Checked as: must not silently revoke Browse projects, which is the destructive reading.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "impossible",
+    "goal": "Delete this project permanently",
+    "from": "board",
+    "why": "Nothing in this product does that. A refusal is the correct output. Inventing a Delete project control is the failure this catches.",
+    "expect": {
+      "outcome": "cannot"
+    }
+  },
+  {
+    "id": "wrong-screen",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "edit-permissions",
+    "why": "Same goal as the baseline, but already at the destination. The plan should be one step, not five. Catches a planner that replays a memorised route instead of reading the screen.",
+    "expect": {
+      "maxSteps": 2,
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "no-such-permission",
+    "goal": "Let contractors approve expense reports",
+    "from": "edit-permissions",
+    "why": "The permission table only has Browse projects, Edit issues and Delete issues. No expense permission exists. Checks it refuses rather than mapping the request onto the nearest checkbox it can see.",
+    "expect": {
+      "outcome": "cannot"
+    }
+  },
+  {
+    "id": "no-audit-log",
+    "goal": "Who changed the contractor permissions last week?",
+    "from": "permissions",
+    "why": "There is no history or audit anywhere in this product. The trap is that the Permissions screen looks like it answers this, so a plan may navigate there and present current state as if it were history.",
+    "expect": {
+      "outcome": "cannot"
+    }
+  },
+  {
+    "id": "no-role-rename",
+    "goal": "Rename the Contractors role to Vendors",
+    "from": "edit-permissions",
+    "why": "Roles cannot be edited. Contractors appears as a column header and in every checkbox label, so there is plenty of plausible-looking surface to hallucinate a rename control from.",
+    "expect": {
+      "outcome": "cannot"
+    }
+  },
+  {
+    "id": "no-scheduling",
+    "goal": "Remove contractor edit access next Monday",
+    "from": "edit-permissions",
+    "why": "The change itself is possible, the timing is not. Correct outcome is partial: do the part that can be done, and say plainly that the Monday timing cannot be honoured. Silently doing it now is the failure, because it looks like success while performing a different action.",
+    "expect": {
+      "outcome": "partial"
+    }
+  },
+  {
+    "id": "already-satisfied",
+    "goal": "Stop contractors from deleting issues",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is already unchecked. Correct outcome is nothing_to_do with an explanation, not an empty panel and not a toggle, which would grant the permission the user asked to remove.",
+    "expect": {
+      "outcome": "nothing_to_do"
+    }
+  },
+  {
+    "id": "partial-notify",
+    "goal": "Remove contractor edit access and tell the contractors why",
+    "from": "edit-permissions",
+    "why": "The permission change is possible, telling anyone is not: there is no message, comment or note anywhere in this flow. Clean two-part request where exactly one part has no route.",
+    "expect": {
+      "outcome": "partial"
+    }
+  },
+  {
+    "id": "partial-conditional",
+    "goal": "Let contractors delete issues, but only during business hours",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is currently unchecked, so the grant is a real action. The time condition cannot be expressed at all. Same family as no-scheduling, which tests whether the partial judgment generalises past the one phrasing it was taught on.",
+    "expect": {
+      "outcome": "partial",
+      "finalCheckedState": true
+    }
+  },
+  {
+    "id": "partial-mixed-permissions",
+    "goal": "Give contractors delete access and permission to approve releases",
+    "from": "edit-permissions",
+    "why": "Delete issues exists, approve releases does not. Two requested permissions, one real. The failure is doing the possible half silently, or refusing both because one is missing.",
+    "expect": {
+      "outcome": "partial"
+    }
+  },
+  {
+    "id": "plan-no-scope-qualifier",
+    "goal": "Remove contractor edit access",
+    "from": "permissions",
+    "why": "Deliberate near-miss for partial. The scheme is shared, so the change reaches other projects, but the user asked for no scope limit, so nothing requested is unmet. Correct outcome is plan with the shared-scheme consequence in the reasoning. Compare read-only-happy, where 'in this project' DOES make it partial. If this one comes back partial, the outcome is firing on caveats and the banner is becoming wallpaper.",
+    "expect": {
+      "outcome": "plan"
+    }
+  },
+  {
+    "id": "plan-two-real-changes",
+    "goal": "Give contractors delete access and remove their edit access",
+    "from": "edit-permissions",
+    "why": "Second near-miss. Two-part request where both parts are fully possible. Guards against partial firing merely because a request has more than one clause.",
+    "expect": {
+      "outcome": "plan",
+      "maxSteps": 3
+    }
+  }
+]
