@@ -1,0 +1,714 @@
+/* Poko landing page: the base system. White pages, a pale lavender alternate, violet
+   black ink, one violet that means Poko and every call to action, Geist for everything
+   read, Geist Mono for labels. Stripe taught the discipline; the colors are Poko's. */
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --alt: #f8f7fc;
+  --ink: #15132b;
+  --ink-2: #45425f;
+  --mu: #6b6886;
+  --mu-2: #8f8ca7;
+  --quiet: #6b6886;
+  --line: #ecebf3;
+  --line-2: #e0deea;
+  --frame: #d6d3e3;
+  --dots: #dedee4;
+
+  --violet: #6d5dfc;
+  --violet-2: #5646e0;
+  /* Poko violet is the brand: every call to action and every link. */
+  --brand: #6d5dfc;
+  --brand-hover: #5a4aef;
+  --violet-bg: #f3f1ff;
+  --violet-line: #e4defd;
+  /* The grid lines that frame the content column down the page, a gap outside it. */
+  --rail: rgba(21, 19, 43, 0.07);
+  --rail-gap: 32px;
+  --ok: #0f7a47;
+  --ok-bg: #e8f4ec;
+  --x: #c2410c;
+  --x-bg: #fff5f0;
+  --err: #d9433b;
+  --amber: #a66300;
+  --amber-bg: #fdf1dc;
+
+  /* Warm neutrals for the made-up Acme console, so it reads as someone else's product. */
+  --paper: #faf8f4;
+  --paper-2: #efe9df;
+  --hl-v: #e6dffd;
+
+  /* Surfaces and quiet strokes; the deep band flips them. */
+  --card: #ffffff;
+  --card-2: #f8f7fc;
+  --trace: #cdc9de;
+  --trace-2: #b9b4cf;
+  --wins: #f8f7ff;
+  --ink-hover: #2c2852;
+
+  --display: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;
+  --dot: var(--font-dot), var(--mono);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --wrap: 1180px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --nav-h: 64px;
+}
+@media (max-width: 1100px) {
+  :root {
+    --rail-gap: 20px;
+  }
+}
+@media (max-width: 760px) {
+  :root {
+    --rail-gap: 10px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--hl-v);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 14px;
+  transition: top 0.2s var(--ease);
+}
+.skip:focus {
+  top: 16px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wrap) + var(--gutter) * 2);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Type: semibold headings with tight tracking, regular text. */
+.h1 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(36px, 3.6vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(26px, 2.5vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+/* Two-tone intros: the statement in ink, the explanation muted, one breath. */
+.h1 .q,
+.h2 .q {
+  color: var(--mu);
+}
+.h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: clamp(20px, 1.8vw, 24px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+/* The one highlighted word in the hero, swept in when the page loads. */
+.h1 i {
+  padding: 0 0.06em;
+  border-radius: 0.08em;
+  background-image: linear-gradient(var(--hl-v), var(--hl-v));
+  background-position: 0 82%;
+  background-repeat: no-repeat;
+  background-size: 0% 0.5em;
+  font-style: normal;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.seen .h1 i {
+  animation: swipe-in 0.9s var(--ease) 0.3s both;
+}
+@keyframes swipe-in {
+  from {
+    background-size: 0% 0.5em;
+  }
+  to {
+    background-size: 100% 0.5em;
+  }
+}
+.lede {
+  max-width: 36em;
+  color: var(--mu);
+  font-size: clamp(16px, 1.25vw, 18px);
+  font-weight: 400;
+  line-height: 1.55;
+}
+.eyebrow,
+.tag {
+  color: var(--mu);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.mono {
+  font-family: var(--mono);
+}
+.dot {
+  font-family: var(--dot);
+  font-variation-settings: 'ROND' 100;
+  font-weight: 800;
+}
+.accent {
+  color: var(--violet);
+}
+.ok {
+  color: var(--ok);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* Paths the scroll effects draw: visible by default, drawn from pathLength 1. */
+.stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+/* Lines draw themselves: set pathLength="1" on the path. */
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--dur, 0.8s) var(--ease) var(--delay, 0s);
+}
+.on .draw,
+.seen .draw,
+.draw.on {
+  stroke-dashoffset: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s var(--ease), border-color 0.2s;
+}
+/* The glossy violet button: a lit top edge, a deeper base and a soft violet glow. */
+.btn-brand {
+  background: linear-gradient(180deg, #8f82ff, #6d5dfc);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -3px 8px rgba(40, 20, 160, 0.25), 0 10px 24px -8px rgba(109, 93, 252, 0.7);
+  transition: box-shadow 0.2s, filter 0.2s, transform 0.15s var(--ease);
+}
+.btn-brand:hover {
+  filter: brightness(1.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -3px 8px rgba(40, 20, 160, 0.25), 0 14px 30px -8px rgba(109, 93, 252, 0.8);
+}
+.btn-soft {
+  border-color: rgba(91, 72, 253, 0.28);
+  background: var(--card);
+  color: var(--brand);
+}
+.btn-soft:hover {
+  border-color: var(--brand);
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn-ink {
+  background: var(--ink);
+  color: var(--bg);
+}
+.btn-ink:hover {
+  background: var(--ink-hover);
+}
+.btn-line {
+  border-color: var(--frame);
+  background: var(--card);
+}
+.btn-line:hover {
+  border-color: var(--ink);
+}
+.btn-sm {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 14px;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* The install command, as an outlined pill that copies itself. */
+.cmd {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  height: 44px;
+  padding: 0 14px 0 16px;
+  border: 1px solid var(--frame);
+  border-radius: 10px;
+  background: var(--card);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 400;
+  transition: border-color 0.2s;
+}
+.cmd:hover {
+  border-color: var(--ink);
+}
+.cmd .prompt {
+  color: var(--mu-2);
+}
+.cmd-copy {
+  display: inline-flex;
+  color: var(--mu);
+}
+.cmd.copied .cmd-copy {
+  color: var(--ok);
+}
+.cmd.cmd-sm {
+  height: 34px;
+  padding: 0 10px 0 13px;
+  font-size: 13px;
+}
+
+.field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--frame);
+  border-radius: 10px;
+  background: var(--card);
+  font-size: 15px;
+  font-weight: 400;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field::placeholder {
+  color: var(--mu-2);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--violet);
+  box-shadow: 0 0 0 3px var(--violet-bg);
+}
+
+/* Email plus one button, in a row or stacked with a visible label. */
+.email-form {
+  display: flex;
+  gap: 8px;
+}
+.email-form .field {
+  min-width: 0;
+  flex: 1;
+}
+.email-form.stack {
+  display: grid;
+  gap: 10px;
+}
+.email-form.stack .btn {
+  width: 100%;
+}
+.form-label {
+  font-size: 14.5px;
+}
+.form-error {
+  margin-top: 8px;
+  color: var(--err);
+  font-size: 13.5px;
+}
+.form-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid #cfe7d8;
+  border-radius: 10px;
+  background: var(--ok-bg);
+  color: var(--ok);
+  font-size: 14.5px;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Poko */
+.poko {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.poko-bob {
+  animation: poko-bob 3.2s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes poko-bob {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.poko-hop {
+  animation: poko-hop 1.1s cubic-bezier(0.3, 1.6, 0.5, 1) infinite;
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+@keyframes poko-hop {
+  30% {
+    transform: translateY(-9px) scaleY(1.04);
+  }
+  55% {
+    transform: translateY(0) scaleY(0.92);
+  }
+}
+.poko-breathe {
+  animation: poko-breathe 3.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+@keyframes poko-breathe {
+  50% {
+    transform: scaleY(0.96);
+  }
+}
+.poko-blink {
+  animation: poko-blink 5.2s infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes poko-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  97% {
+    transform: scaleY(0.1);
+  }
+}
+.poko-z text {
+  animation: poko-z 2.4s ease-out infinite;
+}
+.poko-z text:nth-child(2) {
+  animation-delay: 0.8s;
+}
+@keyframes poko-z {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(6px, -12px);
+  }
+}
+.poko-dots circle {
+  animation: poko-dots 1.2s infinite;
+}
+.poko-dots circle:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.poko-dots circle:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes poko-dots {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes say-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.9);
+  }
+}
+
+/* Poko as a die-cut sticker: a white border and a soft shadow. */
+.sticker {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  filter: drop-shadow(0 2px 1.5px rgba(15, 14, 23, 0.2));
+  transform: rotate(var(--r, 0deg));
+  transition: transform 0.3s var(--ease);
+}
+.sticker:hover {
+  transform: rotate(calc(var(--r, 0deg) - 6deg)) translateY(-3px) scale(1.06);
+}
+.sticker > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* The logo: chunky Poko and a plain wordmark, so the name reads at any size. */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 23px;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.logo-mark {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
+/* Brand logos of the tools we mention: grey and quiet, except where color helps. */
+.brand-logo {
+  display: block;
+  flex: none;
+  object-fit: contain;
+}
+.brand-logo.mono {
+  opacity: 0.62;
+}
+/* One-color logos are drawn dark; on the deep band they turn white. */
+.deep .brand-logo[data-mono] {
+  filter: invert(1);
+}
+
+/* The deep band: Poko's midnight violet, the same components with the tokens flipped,
+   for the one section about what happens under the hood. */
+.deep {
+  --bg: #15122e;
+  --card: #1c1839;
+  --card-2: #221e44;
+  --ink: #ffffff;
+  --ink-2: #d4d1ea;
+  --mu: #a29ec4;
+  --mu-2: #8581a8;
+  --quiet: #8581a8;
+  --line: #2a2550;
+  --line-2: #342e5e;
+  --frame: #423b70;
+  --trace: #463f74;
+  --trace-2: #564e86;
+  --violet-2: #c6bfff;
+  --violet-bg: rgba(139, 125, 255, 0.16);
+  --violet-line: rgba(139, 125, 255, 0.36);
+  --ok: #3ecf8e;
+  --ok-bg: rgba(62, 207, 142, 0.14);
+  --ink-hover: #e3e9f2;
+  --hl-v: rgba(139, 125, 255, 0.35);
+  --rail: rgba(255, 255, 255, 0.08);
+  --brand: #7a6bff;
+  --brand-hover: #8a7dff;
+  color: var(--ink);
+}
+
+/* Poko is the cursor: the system cursor steps aside on desktops, except over text
+   fields, where the normal text cursor comes back. */
+.has-buddy,
+.has-buddy * {
+  cursor: none !important;
+}
+.has-buddy input,
+.has-buddy textarea,
+.has-buddy [contenteditable='true'] {
+  cursor: text !important;
+}
+.has-buddy select {
+  cursor: default !important;
+}
+.buddy {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.buddy:not(.on) {
+  display: none;
+}
+.buddy-poko {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.15s;
+  will-change: transform;
+}
+.buddy-poko.hidden {
+  opacity: 0;
+}
+.buddy-body {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 28% 15%;
+  transition: transform 0.15s var(--ease);
+}
+.buddy-poko.over .buddy-body {
+  transform: scale(1.1) rotate(-6deg);
+}
+.buddy-poko.down .buddy-body {
+  transform: scale(0.88);
+}
+.buddy-body .sticker {
+  display: block;
+}
+.buddy-say {
+  position: absolute;
+  left: calc(100% - 8px);
+  top: 36px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--violet);
+  color: #fff;
+  font-size: 12.5px;
+  line-height: 1.5;
+  white-space: nowrap;
+  animation: say-in 0.3s var(--ease) both;
+}
+.buddy-say.left {
+  left: auto;
+  right: calc(100% - 6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
