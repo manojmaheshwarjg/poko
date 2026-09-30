@@ -1,0 +1,18 @@
+{
+  "outcome": "plan",
+  "goal": "Let contractors view but not edit issues in this project",
+  "understood": "Let contractors view but not edit issues in this project",
+  "limitation": null,
+  "plan": {
+    "id": "demo-needs-repair", "tool": "jira",
+    "goal": "Let contractors view but not edit issues in this project",
+    "outcome": "plan", "limitation": null,
+    "steps": [{
+      "id": "s1",
+      "intent": "Open the Permissions section",
+      "reasoning": "Access controls who can reach the project at all. Permissions controls what they can do once inside, which is the distinction this task turns on.",
+      "target": { "role": "tab", "name": "Permissions" },
+      "action": { "type": "click" }
+    }]
+  }
+}

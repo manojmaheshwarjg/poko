@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sekva dev harness</title>
+<link rel="stylesheet" href="../panel/panel.css">
+<style>
+  html,body { height:100%; margin:0; background:#f7f8fa; color-scheme:light; }
+  .split { display:flex; height:100vh; }
+  .stage { flex:1; min-width:0; padding:10px; }
+  .stage iframe { width:100%; height:100%; border:1px solid #e5e7eb; border-radius:10px; background:#fff; }
+  .side { width:360px; flex:none; border-left:1px solid #e5e7eb; background:#fff; }
+  @media (max-width: 760px) {
+    .split { flex-direction:column; } .side { width:auto; height:50vh; border-left:none; border-top:1px solid rgba(120,120,140,.35); }
+  }
+</style>
+</head>
+<body>
+<div class="split">
+  <div class="stage"><iframe id="stage" title="Mock Jira"></iframe></div>
+  <div class="side"><div id="panel" style="height:100%"></div></div>
+</div>
+
+<script src="../core/redact.js"></script>
+<script src="../core/explore-rules.js"></script>
+<script src="../core/uploader.js"></script>
+<script src="../core/journal.js"></script>
+<script src="../core/runner.js"></script>
+<script src="../core/service.js"></script>
+<script src="../panel/panel.js"></script>
+<script>
+(async function () {
+  const stage = document.getElementById('stage');
+  const params = new URLSearchParams(location.search);
+
+  /* ?stage=<screen> starts the mock on that screen.
+     ?explore=1 (Phase G) shows the multi-page explore fixture instead, served on its
+     own origin so it is a separate product from the Jira mock, and offers read-only
+     exploration in the panel. ?site=<url> points it somewhere else local. */
+  const exploring = params.get('explore') === '1';
+  const siteUrl = params.get('site') || 'http://localhost:4502/fixture/explore-site/index.html';
+  const startScreen = params.get('stage');
+  stage.src = exploring
+    ? siteUrl
+    : '../fixture/jira-mock.html' + (startScreen ? `?screen=${encodeURIComponent(startScreen)}` : '');
+  const productOrigin = exploring ? new URL(siteUrl).origin : location.origin;
+
+  /* ?plan=hardcoded replays the frozen phase 0 plan. It costs nothing and keeps
+     the whole runner path exercisable without the service or an API key. The
+     default is the goal form, which plans through the service on demand. */
+  const useHardcoded = params.get('plan') === 'hardcoded';
+  const plan = useHardcoded
+    ? await fetch('../plans/jira-contractor-permissions.json').then((r) => r.json())
+    : null;
+
+  /* ?demo=partial|nothing|cannot replays a stored service response so the
+     outcome renderings can be checked without calling the API. */
+  const demo = params.get('demo');
+
+  const send = CC.runner.createTransport(() => stage.contentWindow);
+  const service = CC.service.createService({
+    base: params.get('service') || 'http://localhost:4600',
+    tool: 'jira',
+    origin: productOrigin,
+  });
+
+  let render;
+  let uploader = null;
+  const runner = CC.runner.createRunner({
+    send,
+    plan,
+    service,
+    onChange: (state) => render && render(state),
+    /* Phase L: with capture on, the copilot's own decisions are evidence too. */
+    onDecision: (d) => uploader && uploader.decision(d),
+  });
+  render = CC.panel.mount({ root: document.getElementById('panel'), runner, service });
+
+  render(runner.state());
+
+  /* ?learn=1 turns on passive capture. The fixture is data I wrote, so it runs in
+     vendor mode with the no-real-data attestation. Nothing is captured without it.
+     Exploring implies it: exploration is only ever offered to such an install. */
+  const learning = params.get('learn') === '1' || exploring;
+  uploader = learning
+    ? CC.uploader.createUploader({
+        base: params.get('service') || 'http://localhost:4600',
+        origin: productOrigin,
+        mode: 'vendor',
+        attested: true,
+        devTruth: true,
+        onStatus: (s) => {
+          const tail = s.lastError ? ` \u00b7 ${s.lastError}` : '';
+          CC.panel.setLearning(`Learning \u00b7 ${s.sent} sent${s.queued ? `, ${s.queued} queued` : ''}${tail}`);
+        },
+      })
+    : null;
+  if (uploader) uploader.enable();
+
+  /* Exploration (Phase G). The page runs it and pushes pages; the uploader redacts
+     and stores them; the panel shows progress. An upload the server refuses stops the
+     run, since everything after it would be refused too. */
+  let view = { phase: 'idle' };
+  const setView = (patch) => {
+    view = { ...view, ...patch };
+    CC.panel.setExplore(view);
+  };
+  async function onExplore(e) {
+    if (!e) return;
+    if (e.kind === 'progress') setView({ pages: e.pages, skipped: e.skipped });
+    if (e.kind === 'loading') setView({ current: e.url });
+    if (e.kind === 'page' || e.kind === 'done') {
+      try {
+        const res = await uploader.explore(e);
+        if (e.kind === 'page') setView({ sent: (view.sent || 0) + ((res && res.accepted) || 0) });
+      } catch (err) {
+        setView({ uploadError: `Not stored: ${err.message}` });
+        if (view.phase === 'running') send({ type: 'exploreStop' }).catch(() => {});
+      }
+    }
+    if (e.kind === 'done') {
+      setView({
+        phase: 'done', pages: e.run.pages, stopped: e.run.stopped, skippedList: e.run.skipped || [],
+        failures: (e.run.failures || []).length, current: null, stopping: false,
+      });
+    }
+  }
+  if (exploring && uploader) {
+    CC.panel.enableExplore({
+      start: async (maxPages) => {
+        setView({ phase: 'running', pages: 0, skipped: 0, sent: 0, current: null, stopping: false, uploadError: null, error: null, skippedList: [], stopped: null, failures: 0 });
+        const reply = await send({
+          type: 'explore',
+          options: { maxPages, delayMs: Number(params.get('delay')) || 600, mode: 'vendor', attested: true },
+        }).catch((err) => ({ ok: false, error: err.message }));
+        if (!reply || !reply.ok) setView({ phase: 'done', error: (reply && reply.error) || 'could not start', pages: 0 });
+      },
+      stop: () => {
+        setView({ stopping: true });
+        send({ type: 'exploreStop' }).catch(() => {});
+      },
+    });
+  }
+
+  /* Transitions and exploration pages are pushed from the page, not requested, so
+     they arrive outside the request/response transport and are routed here. */
+  window.addEventListener('message', (event) => {
+    const msg = event.data;
+    if (!msg || msg.channel !== 'copilot' || event.source !== stage.contentWindow) return;
+    if (msg.event === 'targetLost') runner.pageEvent({ type: 'targetLost', ...(msg.payload || {}) });
+    if (!uploader) return;
+    if (msg.event === 'transition') uploader.add(msg.payload);
+    if (msg.event === 'explore') onExplore(msg.payload);
+  });
+
+  /* The replay has to happen after the iframe settles, because reset() runs on
+     load and would otherwise wipe an outcome that carries no plan. */
+  async function afterStageReady() {
+    /* The page context is fresh on every load, so capture is re-armed each time. */
+    if (uploader) await send({ type: 'recorder', enabled: true }).catch(() => {});
+    await runner.reset();
+    if (!demo) return;
+    const stored = await fetch(`./responses/${demo}.json`).then((r) => r.json());
+    runner.applyResult(stored);
+  }
+
+  stage.addEventListener('load', afterStageReady);
+  /* Only for a stage that finished loading while this script awaited (?plan=hardcoded).
+     Without the URL check this matched the frame's initial about:blank, messaged a page
+     with no agent, and after the 4 s timeout reset the runner: a late re-render that
+     swallowed clicks and would wipe a plan started in the first seconds. */
+  const early = stage.contentDocument;
+  if (early && early.readyState === 'complete' && early.URL !== 'about:blank') afterStageReady();
+})();
+</script>
+</body>
+</html>

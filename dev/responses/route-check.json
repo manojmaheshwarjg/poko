@@ -1,0 +1,40 @@
+{
+  "outcome": "plan",
+  "goal": "Open this project’s settings",
+  "understood": "Open this project’s settings",
+  "limitation": null,
+  "plan": {
+    "id": "demo-route-check",
+    "tool": "jira",
+    "goal": "Open this project’s settings",
+    "outcome": "plan",
+    "limitation": null,
+    "route": {
+      "id": "r_demo_route_check",
+      "pathHash": "p_demo",
+      "label": "Open the project settings"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "intent": "Open Project settings",
+        "reasoning": "Learned from people starting on the Board. The link exists on every screen, so only the screen check can tell whether this is the context it was learned in.",
+        "target": {
+          "role": "link",
+          "name": "Project settings"
+        },
+        "action": {
+          "type": "click"
+        },
+        "expect": {
+          "screenId": "s_513bbc4b1c",
+          "screenName": "Board",
+          "keys": [
+            "H:b72582cd58936734",
+            "heading:b72582cd58936734@28ab58e3412696ca"
+          ]
+        }
+      }
+    ]
+  }
+}

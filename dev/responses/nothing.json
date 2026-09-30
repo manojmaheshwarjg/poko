@@ -1,0 +1,7 @@
+{
+  "outcome": "nothing_to_do",
+  "understood": "Stop contractors from deleting issues",
+  "limitation": "Delete issues is already unchecked for Contractors, so they cannot delete issues today. Nothing needs changing.",
+  "plan": null,
+  "goal": "Stop contractors from deleting issues"
+}

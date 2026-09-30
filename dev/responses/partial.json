@@ -1,0 +1,28 @@
+{
+  "outcome": "partial",
+  "understood": "Remove contractor edit access next Monday",
+  "limitation": "This product cannot schedule a change for a future date. The step below takes effect immediately, not on Monday.",
+  "plan": {
+    "id": "sample-partial",
+    "tool": "jira",
+    "goal": "Remove contractor edit access next Monday",
+    "outcome": "partial",
+    "limitation": "This product cannot schedule a change for a future date. The step below takes effect immediately, not on Monday.",
+    "steps": [
+      {
+        "id": "s1",
+        "intent": "Remove Edit issues from the Contractors role",
+        "reasoning": "Unchecking this revokes edit access. Browse projects stays on, so contractors can still read. The scheme is shared, so this affects every project using it.",
+        "target": {
+          "role": "checkbox",
+          "name": "Edit issues for Contractors"
+        },
+        "action": {
+          "type": "setChecked",
+          "value": false
+        }
+      }
+    ]
+  },
+  "goal": "Remove contractor edit access next Monday"
+}

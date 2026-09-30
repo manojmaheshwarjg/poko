@@ -1,0 +1,134 @@
+{
+  "outcome": "plan",
+  "goal": "Stop contractors editing issues in this project",
+  "understood": "Remove the Edit issues permission for the Contractors role",
+  "limitation": null,
+  "plan": {
+    "id": "demo-offroute",
+    "tool": "jira",
+    "goal": "Stop contractors editing issues in this project",
+    "outcome": "plan",
+    "limitation": null,
+    "source": "stored response for the dev harness; replayed, never sent to a model",
+    "route": {
+      "id": "r_demo_offroute",
+      "pathHash": "p_demo",
+      "label": "Remove the Edit issues permission for the Contractors role"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "intent": "Open Project settings",
+        "reasoning": "Where the permission scheme is reached from.",
+        "target": {
+          "role": "link",
+          "name": "Project settings"
+        },
+        "action": {
+          "type": "click"
+        },
+        "expect": {
+          "screenId": "s_513bbc4b1c",
+          "screenName": "Board",
+          "keys": [
+            "H:b72582cd58936734",
+            "heading:b72582cd58936734@28ab58e3412696ca"
+          ]
+        }
+      },
+      {
+        "id": "s2",
+        "intent": "Open Permissions",
+        "reasoning": "The scheme for this project lives here.",
+        "target": {
+          "role": "link",
+          "name": "Permissions"
+        },
+        "action": {
+          "type": "click"
+        },
+        "expect": {
+          "screenId": "s_6de2eb9d49",
+          "screenName": "Project settings",
+          "keys": [
+            "H:7d166bbfb8e85bb0",
+            "heading:7d166bbfb8e85bb0@28ab58e3412696ca",
+            "link:1fd66625268190d6@9c538cdd4b5d214f",
+            "link:4ef9e98ba81c9475@9c538cdd4b5d214f",
+            "link:e11d735e291a9262@9c538cdd4b5d214f",
+            "link:e82899e05c6c9511@9c538cdd4b5d214f"
+          ]
+        }
+      },
+      {
+        "id": "s3",
+        "intent": "Open the Actions menu",
+        "reasoning": "Editing the scheme is behind this menu.",
+        "target": {
+          "role": "button",
+          "name": "Actions"
+        },
+        "action": {
+          "type": "click"
+        },
+        "expect": {
+          "screenId": "s_073379f573",
+          "screenName": "Permissions",
+          "keys": [
+            "H:1fd66625268190d6",
+            "button:da74ea6aedf0422f@1fd66625268190d6",
+            "heading:1fd66625268190d6@28ab58e3412696ca"
+          ]
+        }
+      },
+      {
+        "id": "s4",
+        "intent": "Choose Edit permissions",
+        "reasoning": "Opens the grid of permissions by role.",
+        "target": {
+          "role": "menuitem",
+          "name": "Edit permissions"
+        },
+        "action": {
+          "type": "click"
+        },
+        "expect": {
+          "screenId": "s_073379f573",
+          "screenName": "Permissions",
+          "keys": [
+            "H:1fd66625268190d6",
+            "button:da74ea6aedf0422f@1fd66625268190d6",
+            "heading:1fd66625268190d6@28ab58e3412696ca"
+          ]
+        }
+      },
+      {
+        "id": "s5",
+        "intent": "Untick Edit issues for Contractors",
+        "reasoning": "This is the change itself: contractors keep viewing, lose editing.",
+        "target": {
+          "role": "checkbox",
+          "name": "Edit issues for Contractors"
+        },
+        "action": {
+          "type": "setChecked",
+          "value": false
+        },
+        "expect": {
+          "screenId": "s_8d573b40b8",
+          "screenName": "Edit permissions",
+          "keys": [
+            "H:a4c94cf664e3a646",
+            "checkbox:337e52efa8496492@a4c94cf664e3a646",
+            "checkbox:49fd9c772eeffcd2@a4c94cf664e3a646",
+            "checkbox:9a6af3d34e4a34a6@a4c94cf664e3a646",
+            "checkbox:9ec15ac565d11273@a4c94cf664e3a646",
+            "checkbox:be283ff444203475@a4c94cf664e3a646",
+            "checkbox:f187dbe5db6d7ed2@a4c94cf664e3a646",
+            "heading:a4c94cf664e3a646@28ab58e3412696ca"
+          ]
+        }
+      }
+    ]
+  }
+}

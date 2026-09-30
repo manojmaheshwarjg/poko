@@ -1,0 +1,18 @@
+{
+  "outcome": "plan",
+  "goal": "Stop contractors from deleting issues",
+  "understood": "Stop contractors from deleting issues",
+  "limitation": null,
+  "plan": {
+    "id": "demo-noop-step", "tool": "jira",
+    "goal": "Stop contractors from deleting issues",
+    "outcome": "plan", "limitation": null,
+    "steps": [{
+      "id": "s1",
+      "intent": "Remove Delete issues from the Contractors role",
+      "reasoning": "Unchecking this stops contractors deleting issues, and leaves their other permissions alone.",
+      "target": { "role": "checkbox", "name": "Delete issues for Contractors" },
+      "action": { "type": "setChecked", "value": false }
+    }]
+  }
+}
