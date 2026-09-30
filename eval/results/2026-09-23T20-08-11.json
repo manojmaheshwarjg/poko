@@ -1,0 +1,101 @@
+[
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow. Baseline: if this one is not accepted, nothing else matters.",
+    "expect": {
+      "mutates": true,
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ]
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors view but not edit issues in this project",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Let contractors view but not edit issues in this project",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open project settings",
+            "reasoning": "The Project settings link is visible on the board screen and leads to the configuration area for this project.",
+            "target": {
+              "role": "link",
+              "name": "Project settings"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Navigate to Permissions tab",
+            "reasoning": "The Permissions tab shows the current permission scheme for the project and is needed to edit role permissions.",
+            "target": {
+              "role": "tab",
+              "name": "Permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s3",
+            "intent": "Open the Actions menu",
+            "reasoning": "The Actions menu contains the Edit permissions option, which is required to modify the scheme.",
+            "target": {
+              "role": "button",
+              "name": "Actions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s4",
+            "intent": "Select Edit permissions",
+            "reasoning": "Choosing Edit permissions opens the editable permission table for the scheme.",
+            "target": {
+              "role": "menuitem",
+              "name": "Edit permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s5",
+            "intent": "Remove Edit issues permission for Contractors",
+            "reasoning": "Unchecking this box revokes the ability to edit issues while keeping other permissions intact.",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          },
+          {
+            "id": "s6",
+            "intent": "Save changes",
+            "reasoning": "The Save button commits the updated permission scheme to the project.",
+            "target": {
+              "role": "button",
+              "name": "Save"
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 1514
+  }
+]

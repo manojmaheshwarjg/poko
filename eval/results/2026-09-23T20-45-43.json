@@ -1,0 +1,62 @@
+[
+  {
+    "id": "access-not-permissions",
+    "goal": "Contractors should not be able to see this project at all",
+    "from": "board",
+    "why": "This is membership, not permissions. A plan that walks to the Permissions table has misread the request. The Access screen now has a real Remove button per role, so there is something to actually click and no excuse to refuse.",
+    "expect": {
+      "mutates": true,
+      "routeShouldReach": "Remove Contractors"
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Contractors should not be able to see this project at all",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Contractors should not be able to see this project at all",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open project settings",
+            "reasoning": "Navigate to project settings to access project configuration.",
+            "target": {
+              "role": "link",
+              "name": "Project settings"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open Access tab",
+            "reasoning": "Access tab controls who can see the project.",
+            "target": {
+              "role": null,
+              "name": "Access"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s3",
+            "intent": "Remove Contractors role from project",
+            "reasoning": "Removing the role denies them project visibility.",
+            "target": {
+              "role": null,
+              "name": "Remove Contractors"
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 1413
+  }
+]

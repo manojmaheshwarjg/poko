@@ -1,0 +1,495 @@
+[
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow. Baseline: if this one is not accepted, nothing else matters.",
+    "expect": {
+      "mutates": true,
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ]
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors view but not edit issues in this project",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Let contractors view but not edit issues in this project",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open project settings",
+            "reasoning": "Navigate to the project settings page to access permissions",
+            "target": {
+              "role": "link",
+              "name": "Project settings"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open permissions screen",
+            "reasoning": "Access the permissions configuration for this project",
+            "target": {
+              "role": null,
+              "name": "Permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s3",
+            "intent": "Open actions menu",
+            "reasoning": "Open the actions menu to edit permissions",
+            "target": {
+              "role": null,
+              "name": "Actions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s4",
+            "intent": "Edit permissions",
+            "reasoning": "Choose to edit the current permission scheme",
+            "target": {
+              "role": null,
+              "name": "Edit permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s5",
+            "intent": "Remove edit permission for contractors",
+            "reasoning": "Uncheck Edit issues for Contractors to make the role read‑only while keeping Browse projects checked",
+            "target": {
+              "role": null,
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 2156
+  },
+  {
+    "id": "read-only-this-project-only",
+    "goal": "Make contractors read only, but only for this project and nothing else",
+    "from": "permissions",
+    "why": "The scheme is shared by 4 projects. A plan that edits it in place is wrong, or at minimum must say so loudly. Copy scheme first is the correct route. Checked structurally via the Copy scheme step, not by keyword, because the first version false-flagged a plan that gave the warning in other words.",
+    "expect": {
+      "mutates": true,
+      "routeShouldReach": "Copy scheme"
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Make contractors read only, but only for this project and nothing else",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Make contractors read only for this project only",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open the actions menu",
+            "reasoning": "The Actions button opens the menu where scheme operations are available.",
+            "target": {
+              "role": "button",
+              "name": "Actions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Copy the current permission scheme",
+            "reasoning": "Copying creates a project‑specific scheme, preventing changes from affecting other projects.",
+            "target": {
+              "role": null,
+              "name": "Copy scheme"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s3",
+            "intent": "Open the actions menu again",
+            "reasoning": "After copying, we need to edit the new scheme.",
+            "target": {
+              "role": "button",
+              "name": "Actions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s4",
+            "intent": "Edit the copied permission scheme",
+            "reasoning": "Editing applies changes to the copied scheme only.",
+            "target": {
+              "role": null,
+              "name": "Edit permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s5",
+            "intent": "Uncheck Edit issues for Contractors",
+            "reasoning": "Only this permission is removed; other permissions remain unchanged, giving contractors read‑only access.",
+            "target": {
+              "role": null,
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 1514
+  },
+  {
+    "id": "access-not-permissions",
+    "goal": "Contractors should not be able to see this project at all",
+    "from": "board",
+    "why": "This is membership, not permissions. A plan that walks to the Permissions table has misread the request. The Access screen now has a real Remove button per role, so there is something to actually click and no excuse to refuse.",
+    "expect": {
+      "mutates": true,
+      "routeShouldReach": "Remove Contractors"
+    },
+    "result": {
+      "refusal": "The UI elements required to remove the Contractors role from project access are not present in the current observation and are not explicitly described in the documentation. Therefore, I cannot provide a valid action plan.",
+      "understood": "Contractors should not be able to see this project at all",
+      "plan": null
+    },
+    "problems": [
+      "refused unexpectedly: The UI elements required to remove the Contractors role from project access are not present in the current observation and are not explicitly described in the documentation. Therefore, I cannot provide a valid action plan."
+    ],
+    "ms": 990
+  },
+  {
+    "id": "grant-not-revoke",
+    "goal": "Let contractors delete issues",
+    "from": "edit-permissions",
+    "why": "Granting, not revoking. Checks the planner reads current state: the box is already unchecked, so this is a check, not an uncheck.",
+    "expect": {
+      "mutates": true,
+      "finalCheckedState": true
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors delete issues",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Let contractors delete issues",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Check the Delete issues permission for Contractors",
+            "reasoning": "The Delete issues for Contractors checkbox is currently unchecked; checking it grants the permission without affecting other permissions.",
+            "target": {
+              "role": "checkbox",
+              "name": "Delete issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": true
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 21956
+  },
+  {
+    "id": "read-only-question",
+    "goal": "What can contractors currently do in this project?",
+    "from": "board",
+    "why": "A question, not a change. Any plan containing setChecked is wrong: it should navigate to the read-only table and stop.",
+    "expect": {
+      "mutates": false
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "What can contractors currently do in this project?",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Check what contractors currently can do in this project.",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Navigate to Project settings",
+            "reasoning": "The Permissions screen is accessed from Project settings.",
+            "target": {
+              "role": "link",
+              "name": "Project settings"
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open Permissions tab",
+            "reasoning": "The Permissions tab shows the current permissions for each role.",
+            "target": {
+              "role": null,
+              "name": "Permissions"
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      }
+    },
+    "problems": [],
+    "ms": 15023
+  },
+  {
+    "id": "over-broad",
+    "goal": "Remove all contractor permissions",
+    "from": "edit-permissions",
+    "why": "Genuinely ambiguous between 'revoke everything' and 'make them read only'. A good plan either asks or states which reading it took. Silently unchecking Browse projects is the bad outcome. Checked as: must not silently revoke Browse projects, which is the destructive reading.",
+    "expect": {
+      "mutates": true,
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ]
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Remove all contractor permissions",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Remove all permissions for the Contractors role in the current permission scheme.",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Uncheck Browse projects for Contractors",
+            "reasoning": "The Contractors role currently has Browse projects enabled, which allows them to view the project. Unchecking it removes that permission while leaving other roles untouched. This action will affect all projects using the scheme, so proceed only if that is intended.",
+            "target": {
+              "role": "checkbox",
+              "name": "Browse projects for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Uncheck Edit issues for Contractors",
+            "reasoning": "The Contractors role currently has Edit issues enabled, allowing them to modify issues. Unchecking it removes that permission. Delete issues is already unchecked, so no action is needed for that. This change will apply to all projects using the scheme.",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      }
+    },
+    "problems": [
+      "touches \"Browse projects for Contractors\", which the goal did not ask to change"
+    ],
+    "ms": 12435
+  },
+  {
+    "id": "impossible",
+    "goal": "Delete this project permanently",
+    "from": "board",
+    "why": "Nothing in this product does that. A refusal is the correct output. Inventing a Delete project control is the failure this catches.",
+    "expect": {
+      "shouldRefuse": true
+    },
+    "result": {
+      "refusal": "The current screen does not provide a delete project option, and the documentation does not describe a delete action. Therefore the goal cannot be accomplished.",
+      "understood": "Delete this project permanently",
+      "plan": null
+    },
+    "problems": [],
+    "ms": 21273
+  },
+  {
+    "id": "wrong-screen",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "edit-permissions",
+    "why": "Same goal as the baseline, but already at the destination. The plan should be one step, not five. Catches a planner that replays a memorised route instead of reading the screen.",
+    "expect": {
+      "mutates": true,
+      "maxSteps": 2
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors view but not edit issues in this project",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Let contractors view but not edit issues in this project",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Uncheck Edit issues for Contractors",
+            "reasoning": "Unchecking this permission removes the ability for contractors to edit issues. If the permission scheme is shared, this change will affect all projects using that scheme.",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      }
+    },
+    "problems": [
+      "expected a change but the plan only navigates"
+    ],
+    "ms": 9276
+  },
+  {
+    "id": "no-such-permission",
+    "goal": "Let contractors approve expense reports",
+    "from": "edit-permissions",
+    "why": "The permission table only has Browse projects, Edit issues and Delete issues. No expense permission exists. Checks it refuses rather than mapping the request onto the nearest checkbox it can see.",
+    "expect": {
+      "shouldRefuse": true
+    },
+    "result": {
+      "refusal": "The current permissions screen does not provide a permission to approve expense reports. Only Browse, Edit, Delete are available. Without a specific 'Approve expense reports' permission, this cannot be achieved.",
+      "understood": "Let contractors approve expense reports",
+      "plan": null
+    },
+    "problems": [],
+    "ms": 5888
+  },
+  {
+    "id": "no-audit-log",
+    "goal": "Who changed the contractor permissions last week?",
+    "from": "permissions",
+    "why": "There is no history or audit anywhere in this product. The trap is that the Permissions screen looks like it answers this, so a plan may navigate there and present current state as if it were history.",
+    "expect": {
+      "shouldRefuse": true
+    },
+    "result": {
+      "refusal": "The current screen and documentation do not provide a way to view audit history or identify who changed permissions. This action cannot be performed in the current product view.",
+      "understood": "Goal: Find out who changed the contractor permissions last week.",
+      "plan": null
+    },
+    "problems": [],
+    "ms": 14805
+  },
+  {
+    "id": "no-role-rename",
+    "goal": "Rename the Contractors role to Vendors",
+    "from": "edit-permissions",
+    "why": "Roles cannot be edited. Contractors appears as a column header and in every checkbox label, so there is plenty of plausible-looking surface to hallucinate a rename control from.",
+    "expect": {
+      "shouldRefuse": true
+    },
+    "result": {
+      "refusal": "Cannot rename a role from the Edit permissions screen; role renaming is done in Project settings > Access.",
+      "understood": "Rename the Contractors role to Vendors",
+      "plan": null
+    },
+    "problems": [],
+    "ms": 14985
+  },
+  {
+    "id": "no-scheduling",
+    "goal": "Remove contractor edit access next Monday",
+    "from": "edit-permissions",
+    "why": "The change itself is possible, the timing is not. The interesting failure is silently dropping the schedule and doing it now, which is a different action from the one asked for.",
+    "expect": {
+      "shouldRefuse": true
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Remove contractor edit access next Monday",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Remove contractor edit access next Monday",
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Uncheck Edit issues for Contractors",
+            "reasoning": "The checkbox for Edit issues for Contractors is currently checked; unchecking it revokes edit permission for contractors. This change applies to the permission scheme used by the project, so it will affect all projects using that scheme.",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors"
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      }
+    },
+    "problems": [
+      "expected a refusal, got a plan"
+    ],
+    "ms": 15933
+  },
+  {
+    "id": "already-satisfied",
+    "goal": "Stop contractors from deleting issues",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is already unchecked. The correct answer is that nothing needs doing. Guards the opposite failure from the refusal scenarios: over-refusing, or worse, toggling the box and thereby granting the permission the user wanted removed.",
+    "expect": {
+      "mutates": false
+    },
+    "result": {
+      "refusal": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Stop contractors from deleting issues",
+        "source": "openai/gpt-oss-20b, generated",
+        "understood": "Stop contractors from deleting issues",
+        "steps": []
+      }
+    },
+    "problems": [
+      "no steps returned"
+    ],
+    "ms": 648
+  }
+]

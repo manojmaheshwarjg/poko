@@ -1,0 +1,21 @@
+[
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow. Baseline: if this one is not accepted, nothing else matters.",
+    "expect": {
+      "mutates": true,
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ]
+    },
+    "result": {
+      "error": "No documentation is loaded for tool \"jira\"."
+    },
+    "problems": [
+      "request failed: No documentation is loaded for tool \"jira\"."
+    ],
+    "ms": 26
+  }
+]

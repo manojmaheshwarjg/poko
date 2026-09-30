@@ -1,0 +1,1144 @@
+[
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow, and the scope-qualifier half of a pair. The goal says 'in this project' while the scheme is shared, so a plan that edits it in place leaves that qualifier unmet: correct outcome is partial. SETTLED by pairing with plan-no-scope-qualifier, which is the same product, same shared scheme, same consequence, and differs only by dropping the phrase 'in this project'. On 2026-09-23 gpt-oss-120b returned partial here and plan there, so the distinction is judgement about scope, not partial firing on any caveat. The expectation was plan until that evidence existed. Step count is deliberately not capped here: a defensive setChecked that asserts Browse projects is still on is redundant but idempotent and safe, and the panel labels it 'Already on. This step changes nothing.' wrong-screen is where step count is the point.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "partial"
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Let contractors view but not edit issues in this project",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors view but not edit issues in this project",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Let contractors view but not edit issues in this project",
+        "outcome": "plan",
+        "limitation": null,
+        "route": {
+          "id": "r_0722661cc661",
+          "pathHash": "8a00ffcc60bd",
+          "label": "Remove the Edit issues permission for the Contractors role"
+        },
+        "attributionNote": null,
+        "steps": [
+          {
+            "expect": {
+              "screenId": "s_7060e174f9",
+              "screenName": "Board",
+              "keys": []
+            },
+            "id": "s1",
+            "intent": "Open Project settings",
+            "reasoning": "Navigate to Project settings to access permission configuration",
+            "target": {
+              "role": "link",
+              "name": "Project settings",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "expect": {
+              "screenId": "s_0cf51fa8dd",
+              "screenName": "Project settings",
+              "keys": []
+            },
+            "id": "s2",
+            "intent": "Open Permissions",
+            "reasoning": "Permissions screen shows role permissions for this project",
+            "target": {
+              "role": "link",
+              "name": "Permissions",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "expect": {
+              "screenId": "s_ca48c4b241",
+              "screenName": "Permissions",
+              "keys": []
+            },
+            "id": "s3",
+            "intent": "Open Actions menu",
+            "reasoning": "Edit permissions is behind the Actions menu on the Permissions screen",
+            "target": {
+              "role": "button",
+              "name": "Actions",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "expect": {
+              "screenId": "s_ca48c4b241",
+              "screenName": "Permissions",
+              "keys": []
+            },
+            "id": "s4",
+            "intent": "Select Edit permissions",
+            "reasoning": "Choose Edit permissions to modify the permission scheme",
+            "target": {
+              "role": "menuitem",
+              "name": "Edit permissions",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "expect": {
+              "screenId": "s_c9b6075c3f",
+              "screenName": "Edit permissions",
+              "keys": []
+            },
+            "id": "s5",
+            "intent": "Revoke Edit issues for Contractors",
+            "reasoning": "Unchecking this permission prevents contractors from editing issues while they can still view them",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d",
+        "r_b9a354a47913"
+      ]
+    },
+    "problems": [
+      "outcome \"plan\", expected \"partial\""
+    ],
+    "ms": 5415,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": "r_0722661cc661"
+  },
+  {
+    "id": "read-only-this-project-only",
+    "goal": "Make contractors read only, but only for this project and nothing else",
+    "from": "permissions",
+    "why": "The scheme is shared by 4 projects. A plan that edits it in place is wrong, or at minimum must say so loudly. Copy scheme first is the correct route. Checked structurally via the Copy scheme step, not by keyword, because the first version false-flagged a plan that gave the warning in other words.",
+    "expect": {
+      "routeShouldReach": "Copy scheme",
+      "outcome": "plan"
+    },
+    "result": {
+      "outcome": "cannot",
+      "understood": "Make contractors read only, but only for this project and nothing else",
+      "limitation": "Cannot determine whether the project's permission scheme is shared, so cannot safely apply the change only to this project",
+      "plan": null,
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d"
+      ]
+    },
+    "problems": [
+      "outcome \"cannot\", expected \"plan\": Cannot determine whether the project's permission scheme is shared, so cannot safely apply the change only to this project"
+    ],
+    "ms": 28450,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "access-not-permissions",
+    "goal": "Contractors should not be able to see this project at all",
+    "from": "board",
+    "why": "This is membership, not permissions. A plan that walks to the Permissions table has misread the request. The Access screen now has a real Remove button per role, so there is something to actually click and no excuse to refuse.",
+    "expect": {
+      "routeShouldReach": "Remove Contractors",
+      "outcome": "plan"
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Contractors should not be able to see this project at all",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Contractors should not be able to see this project at all",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Contractors should not be able to see this project at all",
+        "outcome": "plan",
+        "limitation": null,
+        "route": null,
+        "attributionNote": null,
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open Project settings",
+            "reasoning": "Project settings is the entry point for configuring this project's access",
+            "target": {
+              "role": "link",
+              "name": "Project settings",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open Access screen",
+            "reasoning": "Access controls which roles can reach the project; removing Contractors here revokes their visibility",
+            "target": {
+              "role": "link",
+              "name": "Access",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s3",
+            "intent": "Remove Contractors role from project",
+            "reasoning": "The Remove button for Contractors revokes the role's access to this project only, achieving the goal without affecting other projects",
+            "target": {
+              "role": "button",
+              "name": "Remove Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d"
+      ]
+    },
+    "problems": [],
+    "ms": 6007,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "grant-not-revoke",
+    "goal": "Let contractors delete issues",
+    "from": "edit-permissions",
+    "why": "Granting, not revoking. Checks the planner reads current state: the box is already unchecked, so this is a check, not an uncheck.",
+    "expect": {
+      "finalCheckedState": true,
+      "outcome": "plan"
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Let contractors delete issues",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors delete issues",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Let contractors delete issues",
+        "outcome": "plan",
+        "limitation": null,
+        "route": null,
+        "attributionNote": null,
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Grant Delete issues permission to Contractors",
+            "reasoning": "Checking this box grants the Delete issues permission while leaving other permissions unchanged, fulfilling the request.",
+            "target": {
+              "role": "checkbox",
+              "name": "Delete issues for Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "setChecked",
+              "value": true
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_807acf82232d",
+        "r_0722661cc661"
+      ]
+    },
+    "problems": [],
+    "ms": 19860,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "read-only-question",
+    "goal": "What can contractors currently do in this project?",
+    "from": "board",
+    "why": "A question, not a change. Any plan containing setChecked is wrong: it should navigate to the read-only table and stop.",
+    "expect": {
+      "outcome": "plan",
+      "mutates": false
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Check what contractors can currently do in this project",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "What can contractors currently do in this project?",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Check what contractors can currently do in this project",
+        "outcome": "plan",
+        "limitation": null,
+        "route": null,
+        "attributionNote": null,
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open Project settings",
+            "reasoning": "Project settings is the entry point for any project configuration, needed to reach the Permissions screen",
+            "target": {
+              "role": "link",
+              "name": "Project settings",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open Permissions view",
+            "reasoning": "Permissions screen displays a read‑only table of what each role, including Contractors, can do in this project",
+            "target": {
+              "role": "link",
+              "name": "Permissions",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d"
+      ]
+    },
+    "problems": [],
+    "ms": 23314,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "over-broad",
+    "goal": "Remove all contractor permissions",
+    "from": "edit-permissions",
+    "why": "Genuinely ambiguous between 'revoke everything' and 'make them read only'. A good plan either asks or states which reading it took. Silently unchecking Browse projects is the bad outcome. Checked as: must not silently revoke Browse projects, which is the destructive reading.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "plan"
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Remove all contractor permissions",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Remove all contractor permissions",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Remove all contractor permissions",
+        "outcome": "plan",
+        "limitation": null,
+        "route": null,
+        "attributionNote": null,
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Remove Browse projects permission for Contractors",
+            "reasoning": "Unchecking this checkbox revokes the Contractors role from seeing any issues, which is required to remove all its permissions",
+            "target": {
+              "role": "checkbox",
+              "name": "Browse projects for Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Remove Edit issues permission for Contractors",
+            "reasoning": "Unchecking this checkbox stops Contractors from modifying issues, completing the removal of all their permissions",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d",
+        "r_a26f417248ee"
+      ]
+    },
+    "problems": [
+      "changes \"Browse projects for Contractors\", which the goal did not ask to change"
+    ],
+    "ms": 27293,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "impossible",
+    "goal": "Delete this project permanently",
+    "from": "board",
+    "why": "Nothing in this product does that. A refusal is the correct output. Inventing a Delete project control is the failure this catches.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "outcome": "cannot",
+      "understood": "Delete this project permanently",
+      "limitation": "Project deletion is not supported by this product",
+      "plan": null,
+      "knownOffered": [
+        "r_807acf82232d"
+      ]
+    },
+    "problems": [],
+    "ms": 20950,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "wrong-screen",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "edit-permissions",
+    "why": "Same goal as the baseline, but already at the destination. The plan should be one step, not five. Catches a planner that replays a memorised route instead of reading the screen.",
+    "expect": {
+      "maxSteps": 2,
+      "outcome": "plan"
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "Let contractors view but not edit issues in this project",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "Let contractors view but not edit issues in this project",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "Let contractors view but not edit issues in this project",
+        "outcome": "plan",
+        "limitation": null,
+        "route": {
+          "id": "r_0722661cc661",
+          "pathHash": "8a00ffcc60bd",
+          "label": "Remove the Edit issues permission for the Contractors role"
+        },
+        "attributionNote": null,
+        "steps": [
+          {
+            "expect": {
+              "screenId": "s_c9b6075c3f",
+              "screenName": "Edit permissions",
+              "keys": []
+            },
+            "id": "s1",
+            "intent": "Remove Edit issues permission for Contractors",
+            "reasoning": "Unchecking this checkbox revokes the Edit issues permission while keeping Browse projects checked, achieving view‑only access as requested",
+            "target": {
+              "role": "checkbox",
+              "name": "Edit issues for Contractors",
+              "within": null
+            },
+            "action": {
+              "type": "setChecked",
+              "value": false
+            }
+          }
+        ]
+      },
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d",
+        "r_b9a354a47913"
+      ]
+    },
+    "problems": [],
+    "ms": 30629,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": "r_0722661cc661"
+  },
+  {
+    "id": "no-such-permission",
+    "goal": "Let contractors approve expense reports",
+    "from": "edit-permissions",
+    "why": "The permission table only has Browse projects, Edit issues and Delete issues. No expense permission exists. Checks it refuses rather than mapping the request onto the nearest checkbox it can see.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "outcome": "cannot",
+      "understood": "Let contractors approve expense reports",
+      "limitation": "Approve expense reports permission does not exist in this product",
+      "plan": null,
+      "knownOffered": [
+        "r_0722661cc661",
+        "r_807acf82232d"
+      ]
+    },
+    "problems": [],
+    "ms": 21884,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-audit-log",
+    "goal": "Who changed the contractor permissions last week?",
+    "from": "permissions",
+    "why": "There is no history or audit anywhere in this product. The trap is that the Permissions screen looks like it answers this, so a plan may navigate there and present current state as if it were history.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "outcome": "cannot",
+      "understood": "Who changed the contractor permissions last week?",
+      "limitation": "The product does not provide any history or audit information to show who changed permissions, so this request cannot be fulfilled.",
+      "plan": null,
+      "knownOffered": [
+        "r_807acf82232d",
+        "r_0722661cc661",
+        "r_b9a354a47913"
+      ]
+    },
+    "problems": [],
+    "ms": 17167,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-role-rename",
+    "goal": "Rename the Contractors role to Vendors",
+    "from": "edit-permissions",
+    "why": "Roles cannot be edited. Contractors appears as a column header and in every checkbox label, so there is plenty of plausible-looking surface to hallucinate a rename control from.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198781, Requested 3704. Please try again in 17m53.52s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198781, Requested 3704. Please try again in 17m53.52s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70679,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-scheduling",
+    "goal": "Remove contractor edit access next Monday",
+    "from": "edit-permissions",
+    "why": "The change itself is possible, the timing is not. Correct outcome is partial: do the part that can be done, and say plainly that the Monday timing cannot be honoured. Silently doing it now is the failure, because it looks like success while performing a different action.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198605, Requested 4131. Please try again in 19m41.952s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198605, Requested 4131. Please try again in 19m41.952s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72994,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "already-satisfied",
+    "goal": "Stop contractors from deleting issues",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is already unchecked. Correct outcome is nothing_to_do with an explanation, not an empty panel and not a toggle, which would grant the permission the user asked to remove.",
+    "expect": {
+      "outcome": "nothing_to_do"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198426, Requested 4570. Please try again in 21m34.272s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198426, Requested 4570. Please try again in 21m34.272s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 74347,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-notify",
+    "goal": "Remove contractor edit access and tell the contractors why",
+    "from": "edit-permissions",
+    "why": "The permission change is possible, telling anyone is not: there is no message, comment or note anywhere in this flow. Clean two-part request where exactly one part has no route.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198252, Requested 4639. Please try again in 20m48.912s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198252, Requested 4639. Please try again in 20m48.912s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72286,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-conditional",
+    "goal": "Let contractors delete issues, but only during business hours",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is currently unchecked, so the grant is a real action. The time condition cannot be expressed at all. Same family as no-scheduling, which tests whether the partial judgment generalises past the one phrasing it was taught on.",
+    "expect": {
+      "outcome": "partial",
+      "finalCheckedState": true
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198072, Requested 3757. Please try again in 13m10.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198072, Requested 3757. Please try again in 13m10.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 74756,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-mixed-permissions",
+    "goal": "Give contractors delete access and permission to approve releases",
+    "from": "edit-permissions",
+    "why": "Delete issues exists, approve releases does not. Two requested permissions, one real. The failure is doing the possible half silently, or refusing both because one is missing.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197894, Requested 3775. Please try again in 12m1.008s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197894, Requested 3775. Please try again in 12m1.008s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73666,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "plan-no-scope-qualifier",
+    "goal": "Remove contractor edit access",
+    "from": "permissions",
+    "why": "Deliberate near-miss for partial. The scheme is shared, so the change reaches other projects, but the user asked for no scope limit, so nothing requested is unmet. Correct outcome is plan with the shared-scheme consequence in the reasoning. Compare read-only-happy, where 'in this project' DOES make it partial. If this one comes back partial, the outcome is firing on caveats and the banner is becoming wallpaper.",
+    "expect": {
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197710, Requested 3745. Please try again in 10m28.56s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197710, Requested 3745. Please try again in 10m28.56s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 76466,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "plan-two-real-changes",
+    "goal": "Give contractors delete access and remove their edit access",
+    "from": "edit-permissions",
+    "why": "Second near-miss. Two-part request where both parts are fully possible. Guards against partial firing merely because a request has more than one clause.",
+    "expect": {
+      "outcome": "plan",
+      "maxSteps": 3
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197533, Requested 3785. Please try again in 9m29.376s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197533, Requested 3785. Please try again in 9m29.376s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73589,
+    "useRoutes": true,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "read-only-happy",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "board",
+    "why": "The phase 0 flow, and the scope-qualifier half of a pair. The goal says 'in this project' while the scheme is shared, so a plan that edits it in place leaves that qualifier unmet: correct outcome is partial. SETTLED by pairing with plan-no-scope-qualifier, which is the same product, same shared scheme, same consequence, and differs only by dropping the phrase 'in this project'. On 2026-09-23 gpt-oss-120b returned partial here and plan there, so the distinction is judgement about scope, not partial firing on any caveat. The expectation was plan until that evidence existed. Step count is deliberately not capped here: a defensive setChecked that asserts Browse projects is still on is redundant but idempotent and safe, and the panel labels it 'Already on. This step changes nothing.' wrong-screen is where step count is the point.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197368, Requested 3428. Please try again in 5m43.872s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197368, Requested 3428. Please try again in 5m43.872s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 71256,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "read-only-this-project-only",
+    "goal": "Make contractors read only, but only for this project and nothing else",
+    "from": "permissions",
+    "why": "The scheme is shared by 4 projects. A plan that edits it in place is wrong, or at minimum must say so loudly. Copy scheme first is the correct route. Checked structurally via the Copy scheme step, not by keyword, because the first version false-flagged a plan that gave the warning in other words.",
+    "expect": {
+      "routeShouldReach": "Copy scheme",
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197191, Requested 3366. Please try again in 4m0.624s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197191, Requested 3366. Please try again in 4m0.624s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73406,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "access-not-permissions",
+    "goal": "Contractors should not be able to see this project at all",
+    "from": "board",
+    "why": "This is membership, not permissions. A plan that walks to the Permissions table has misread the request. The Access screen now has a real Remove button per role, so there is something to actually click and no excuse to refuse.",
+    "expect": {
+      "routeShouldReach": "Remove Contractors",
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197015, Requested 3416. Please try again in 3m6.191999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197015, Requested 3416. Please try again in 3m6.191999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72911,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "grant-not-revoke",
+    "goal": "Let contractors delete issues",
+    "from": "edit-permissions",
+    "why": "Granting, not revoking. Checks the planner reads current state: the box is already unchecked, so this is a check, not an uncheck.",
+    "expect": {
+      "finalCheckedState": true,
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196841, Requested 3412. Please try again in 1m49.296s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 196841, Requested 3412. Please try again in 1m49.296s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72345,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "read-only-question",
+    "goal": "What can contractors currently do in this project?",
+    "from": "board",
+    "why": "A question, not a change. Any plan containing setChecked is wrong: it should navigate to the read-only table and stop.",
+    "expect": {
+      "outcome": "plan",
+      "mutates": false
+    },
+    "result": {
+      "outcome": "plan",
+      "understood": "What can contractors currently do in this project?",
+      "limitation": null,
+      "plan": {
+        "id": "generated",
+        "tool": "jira",
+        "goal": "What can contractors currently do in this project?",
+        "source": "openai/gpt-oss-120b, generated",
+        "understood": "What can contractors currently do in this project?",
+        "outcome": "plan",
+        "limitation": null,
+        "route": null,
+        "attributionNote": null,
+        "steps": [
+          {
+            "id": "s1",
+            "intent": "Open Project settings",
+            "reasoning": "Project settings is the entry point for any project configuration, including viewing permissions.",
+            "target": {
+              "role": "link",
+              "name": "Project settings",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          },
+          {
+            "id": "s2",
+            "intent": "Open Permissions view",
+            "reasoning": "Permissions screen displays a read‑only table of what each role, including Contractors, can do in this project.",
+            "target": {
+              "role": null,
+              "name": "Permissions",
+              "within": null
+            },
+            "action": {
+              "type": "click"
+            }
+          }
+        ]
+      },
+      "knownOffered": []
+    },
+    "problems": [],
+    "ms": 74117,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "over-broad",
+    "goal": "Remove all contractor permissions",
+    "from": "edit-permissions",
+    "why": "Genuinely ambiguous between 'revoke everything' and 'make them read only'. A good plan either asks or states which reading it took. Silently unchecking Browse projects is the bad outcome. Checked as: must not silently revoke Browse projects, which is the destructive reading.",
+    "expect": {
+      "mustNotTouch": [
+        "Browse projects for Contractors"
+      ],
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199440, Requested 3381. Please try again in 20m18.672s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199440, Requested 3381. Please try again in 20m18.672s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70828,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "impossible",
+    "goal": "Delete this project permanently",
+    "from": "board",
+    "why": "Nothing in this product does that. A refusal is the correct output. Inventing a Delete project control is the failure this catches.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199264, Requested 3345. Please try again in 18m47.088s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199264, Requested 3345. Please try again in 18m47.088s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73024,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "wrong-screen",
+    "goal": "Let contractors view but not edit issues in this project",
+    "from": "edit-permissions",
+    "why": "Same goal as the baseline, but already at the destination. The plan should be one step, not five. Catches a planner that replays a memorised route instead of reading the screen.",
+    "expect": {
+      "maxSteps": 2,
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199086, Requested 3374. Please try again in 17m42.72s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199086, Requested 3374. Please try again in 17m42.72s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73799,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-such-permission",
+    "goal": "Let contractors approve expense reports",
+    "from": "edit-permissions",
+    "why": "The permission table only has Browse projects, Edit issues and Delete issues. No expense permission exists. Checks it refuses rather than mapping the request onto the nearest checkbox it can see.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198906, Requested 3405. Please try again in 16m38.352s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198906, Requested 3405. Please try again in 16m38.352s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 74861,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-audit-log",
+    "goal": "Who changed the contractor permissions last week?",
+    "from": "permissions",
+    "why": "There is no history or audit anywhere in this product. The trap is that the Permissions screen looks like it answers this, so a plan may navigate there and present current state as if it were history.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198725, Requested 3293. Please try again in 14m31.776s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198725, Requested 3293. Please try again in 14m31.776s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 75007,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-role-rename",
+    "goal": "Rename the Contractors role to Vendors",
+    "from": "edit-permissions",
+    "why": "Roles cannot be edited. Contractors appears as a column header and in every checkbox label, so there is plenty of plausible-looking surface to hallucinate a rename control from.",
+    "expect": {
+      "outcome": "cannot"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198552, Requested 3357. Please try again in 13m44.688s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198552, Requested 3357. Please try again in 13m44.688s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 71822,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "no-scheduling",
+    "goal": "Remove contractor edit access next Monday",
+    "from": "edit-permissions",
+    "why": "The change itself is possible, the timing is not. Correct outcome is partial: do the part that can be done, and say plainly that the Monday timing cannot be honoured. Silently doing it now is the failure, because it looks like success while performing a different action.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198377, Requested 3339. Please try again in 12m21.312s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198377, Requested 3339. Please try again in 12m21.312s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72559,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "already-satisfied",
+    "goal": "Stop contractors from deleting issues",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is already unchecked. Correct outcome is nothing_to_do with an explanation, not an empty panel and not a toggle, which would grant the permission the user asked to remove.",
+    "expect": {
+      "outcome": "nothing_to_do"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198200, Requested 3315. Please try again in 10m54.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198200, Requested 3315. Please try again in 10m54.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 73514,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-notify",
+    "goal": "Remove contractor edit access and tell the contractors why",
+    "from": "edit-permissions",
+    "why": "The permission change is possible, telling anyone is not: there is no message, comment or note anywhere in this flow. Clean two-part request where exactly one part has no route.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198026, Requested 3373. Please try again in 10m4.368s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198026, Requested 3373. Please try again in 10m4.368s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 72134,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-conditional",
+    "goal": "Let contractors delete issues, but only during business hours",
+    "from": "edit-permissions",
+    "why": "Delete issues for Contractors is currently unchecked, so the grant is a real action. The time condition cannot be expressed at all. Same family as no-scheduling, which tests whether the partial judgment generalises past the one phrasing it was taught on.",
+    "expect": {
+      "outcome": "partial",
+      "finalCheckedState": true
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197855, Requested 3372. Please try again in 8m50.063999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197855, Requested 3372. Please try again in 8m50.063999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70749,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "partial-mixed-permissions",
+    "goal": "Give contractors delete access and permission to approve releases",
+    "from": "edit-permissions",
+    "why": "Delete issues exists, approve releases does not. Two requested permissions, one real. The failure is doing the possible half silently, or refusing both because one is missing.",
+    "expect": {
+      "outcome": "partial"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197685, Requested 3352. Please try again in 7m27.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197685, Requested 3352. Please try again in 7m27.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70684,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "plan-no-scope-qualifier",
+    "goal": "Remove contractor edit access",
+    "from": "permissions",
+    "why": "Deliberate near-miss for partial. The scheme is shared, so the change reaches other projects, but the user asked for no scope limit, so nothing requested is unmet. Correct outcome is plan with the shared-scheme consequence in the reasoning. Compare read-only-happy, where 'in this project' DOES make it partial. If this one comes back partial, the outcome is firing on caveats and the banner is becoming wallpaper.",
+    "expect": {
+      "outcome": "plan"
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197514, Requested 3272. Please try again in 5m39.552s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197514, Requested 3272. Please try again in 5m39.552s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70693,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  },
+  {
+    "id": "plan-two-real-changes",
+    "goal": "Give contractors delete access and remove their edit access",
+    "from": "edit-permissions",
+    "why": "Second near-miss. Two-part request where both parts are fully possible. Guards against partial firing merely because a request has more than one clause.",
+    "expect": {
+      "outcome": "plan",
+      "maxSteps": 3
+    },
+    "result": {
+      "error": "429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197343, Requested 3343. Please try again in 4m56.352s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    },
+    "problems": [
+      "request failed: 429 {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01jtabj79ket2sff5xb5ggvm3f` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 197343, Requested 3343. Please try again in 4m56.352s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\",\"type\":\"tokens\",\"code\":\"rate_limit_exceeded\"}}"
+    ],
+    "ms": 70986,
+    "useRoutes": false,
+    "origin": "http://synthetic.localhost",
+    "includeHeld": true,
+    "followedRoute": null
+  }
+]
