@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit permissions - Acme Tracker</title>
+<style>
+:root { --bg:#f7f7f9; --card:#fff; --text:#1b1b22; --dim:#666674; --border:#e2e2e8; --accent:#3a5bd9; --tint:#eef1fd; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#121217; --card:#1a1a21; --text:#ececf2; --dim:#9a9aa8; --border:#2b2b35; --accent:#8ea2f5; --tint:#22263a; } }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font:14px/1.5 system-ui, -apple-system, sans-serif; }
+.top { display:flex; align-items:center; gap:16px; padding:10px 18px; background:var(--card); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.brand { font-weight:700; }
+.top nav { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.top a, .side a, .content a { color:var(--accent); text-decoration:none; }
+.wrap { display:flex; gap:18px; padding:18px; }
+.side { width:180px; flex:none; display:flex; flex-direction:column; gap:6px; }
+.side a[aria-current="page"] { font-weight:650; background:var(--tint); border-radius:6px; padding:2px 6px; margin:0 -6px; }
+.content { flex:1; min-width:0; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 20px; }
+h1 { font-size:20px; margin:0 0 12px; }
+h2 { font-size:15px; margin:18px 0 8px; }
+button { font:inherit; padding:6px 12px; border-radius:7px; border:1px solid var(--border); background:var(--card); color:var(--text); cursor:pointer; }
+table { border-collapse:collapse; width:100%; }
+td, th { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); }
+.cols { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+.col { background:var(--bg); border-radius:8px; padding:10px; min-height:80px; }
+.card { display:block; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:6px 8px; margin-top:6px; }
+.danger { margin-top:22px; padding:12px; border:1px solid var(--border); border-radius:8px; }
+.row { display:flex; gap:10px; align-items:center; margin:6px 0; flex-wrap:wrap; }
+.note { color:var(--dim); font-size:12.5px; }
+@media (max-width:640px) { .wrap { flex-direction:column; } .side { width:auto; flex-direction:row; flex-wrap:wrap; } .cols { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="brand">Acme Tracker</span>
+  <nav aria-label="Main">
+    <a href="/fixture/explore-site/index.html">Your work</a>
+    <a href="/fixture/explore-site/projects/1/board.html">Projects</a>
+    <a href="/fixture/explore-site/billing.html">Billing</a>
+    <a href="/fixture/explore-site/help/">Help</a>
+    <a href="https://example.com/docs">Docs</a>
+    <a href="/fixture/explore-site/bye.html" aria-label="Sign out" title="Sign out">&#x238B;</a>
+  </nav>
+</header>
+<div class="wrap">
+  <nav class="side" aria-label="Project">
+    <a href="/fixture/explore-site/projects/1/board.html">Board</a>
+    <a href="/fixture/explore-site/projects/1/settings.html" aria-current="page">Project settings</a>
+  </nav>
+  <main class="content" data-screen="edit-permissions">
+    <h1>Edit permissions</h1>
+    <table>
+      <thead><tr><th>Permission</th><th>Administrators</th><th>Members</th><th>Contractors</th></tr></thead>
+      <tbody>
+        <tr><td>Browse projects</td><td><input type="checkbox" aria-label="Browse projects: Administrators" checked></td><td><input type="checkbox" aria-label="Browse projects: Members" checked></td><td><input type="checkbox" aria-label="Browse projects: Contractors" checked></td></tr>
+        <tr><td>Edit issues</td><td><input type="checkbox" aria-label="Edit issues: Administrators" checked></td><td><input type="checkbox" aria-label="Edit issues: Members" checked></td><td><input type="checkbox" aria-label="Edit issues: Contractors" checked></td></tr>
+      </tbody>
+    </table>
+    <div class="row"><button type="button">Save</button> <a href="/fixture/explore-site/projects/1/settings/permissions.html">Back to permissions</a></div>
+  </main>
+</div>
+<script src="/core/redact.js"></script>
+<script src="/core/screencheck.js"></script>
+<script src="/core/observer.js"></script>
+<script src="/core/target.js"></script>
+<script src="/core/highlighter.js"></script>
+<script src="/core/executor.js"></script>
+<script src="/core/recorder.js"></script>
+<script src="/core/explore-rules.js"></script>
+<script src="/core/explorer.js"></script>
+<script src="/core/page-agent.js"></script>
+</body>
+</html>

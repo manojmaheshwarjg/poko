@@ -1,0 +1,48 @@
+{
+  "id": "jira-contractor-permissions",
+  "tool": "jira",
+  "goal": "Let contractors view but not edit issues in this project",
+  "source": "hardcoded (Phase 0). Phase 1 replaces this whole object with planner output.",
+  "steps": [
+    {
+      "id": "s1",
+      "intent": "Open this project's settings",
+      "reasoning": "Permissions are configured per project, not in the global admin area. That split is the single thing that most often sends people to the wrong screen.",
+      "target": { "role": "link", "name": "Project settings" },
+      "action": { "type": "click" },
+      "expect": { "screen": "project-settings" }
+    },
+    {
+      "id": "s2",
+      "intent": "Open the Permissions section",
+      "reasoning": "Access controls who can reach the project at all. Permissions controls what they can do once inside, which is the distinction this task turns on.",
+      "target": { "role": "link", "name": "Permissions" },
+      "action": { "type": "click" },
+      "expect": { "screen": "permissions" }
+    },
+    {
+      "id": "s3",
+      "intent": "Open the Actions menu",
+      "reasoning": "This screen is read-only. The scheme it displays is shared, so editing is deliberately behind a menu to stop you changing other projects by accident.",
+      "target": { "role": "button", "name": "Actions" },
+      "action": { "type": "click" },
+      "expect": { "menuOpen": true }
+    },
+    {
+      "id": "s4",
+      "intent": "Choose Edit permissions",
+      "reasoning": "Edit permissions changes this scheme in place. Use a different scheme would swap the whole scheme out, which is a bigger change than you asked for.",
+      "target": { "role": "menuitem", "name": "Edit permissions" },
+      "action": { "type": "click" },
+      "expect": { "screen": "edit-permissions" }
+    },
+    {
+      "id": "s5",
+      "intent": "Remove Edit issues from the Contractors role",
+      "reasoning": "Browse projects stays on so contractors can still read everything. Dropping Edit issues is the narrowest change that gets you view-only, and it leaves comments and transitions untouched.",
+      "target": { "role": "checkbox", "name": "Edit issues for Contractors" },
+      "action": { "type": "setChecked", "value": false },
+      "expect": { "screen": "edit-permissions" }
+    }
+  ]
+}

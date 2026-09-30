@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mock Jira</title>
+<style>
+  :root { --b:#dfe1e6; --t:#172b4d; --dim:#5e6c84; --blue:#0052cc; --sunken:#f4f5f7; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 -apple-system,system-ui,"Segoe UI",sans-serif; color:var(--t); }
+  .app { display:flex; min-height:100vh; }
+  .rail { width:220px; flex:none; background:var(--sunken); border-right:1px solid var(--b); padding:16px 8px; }
+  .rail h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); margin:0 0 10px 10px; }
+  .rail a { display:block; padding:7px 10px; border-radius:4px; color:var(--t); text-decoration:none; font-weight:500; }
+  .rail a:hover { background:#ebecf0; }
+  .rail a[aria-current="page"] { background:#e6effc; color:var(--blue); }
+  main { flex:1; padding:28px 32px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--dim); margin-bottom:22px; }
+  table { border-collapse:collapse; width:100%; max-width:620px; }
+  th,td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--b); }
+  th { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--dim); }
+  button { font:inherit; padding:6px 13px; border:1px solid var(--b); background:#fff; border-radius:4px; cursor:pointer; font-weight:500; }
+  button:hover { background:var(--sunken); }
+  .menu { position:relative; display:inline-block; }
+  .menu ul { position:absolute; right:0; top:calc(100% + 4px); list-style:none; margin:0; padding:4px;
+             background:#fff; border:1px solid var(--b); border-radius:5px; min-width:210px;
+             box-shadow:0 4px 12px rgba(9,30,66,.15); }
+  .menu li button { display:block; width:100%; text-align:left; border:none; background:none; padding:7px 10px; border-radius:4px; }
+  [hidden] { display:none !important; }
+  .yes { color:#216e4e; font-weight:600; } .no { color:#ae2e24; font-weight:600; }
+  .bar { display:flex; align-items:center; justify-content:space-between; max-width:620px; margin-bottom:18px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="rail" aria-label="Project">
+    <h2>Payments</h2>
+    <a href="#" data-nav="project">Backlog</a>
+    <a href="#" data-nav="project">Board</a>
+    <a href="#" data-nav="project">Issues</a>
+    <a href="#" data-nav="project-settings">Project settings</a>
+  </nav>
+
+  <main>
+    <!-- screen: project -->
+    <section data-screen="project">
+      <h1>Board</h1>
+      <p class="sub">PAY-14 through PAY-98. Nothing to do here, this is just somewhere to start from.</p>
+    </section>
+
+    <!-- screen: project-settings -->
+    <section data-screen="project-settings" hidden>
+      <h1>Project settings</h1>
+      <p class="sub">Settings for Payments.</p>
+      <nav aria-label="Settings">
+        <a href="#" data-nav="project-settings">Details</a> &middot;
+        <a href="#" data-nav="access">Access</a> &middot;
+        <a href="#" data-nav="permissions">Permissions</a> &middot;
+        <a href="#" data-nav="notifications">Notifications</a>
+      </nav>
+    </section>
+
+    <!-- screen: access. Membership, not permissions. Still the plausible wrong
+         turn for an "edit" question, but it now has real controls, so a plan
+         that correctly routes here has something to actually click. -->
+    <section data-screen="access" hidden>
+      <div class="bar">
+        <div>
+          <h1>Access</h1>
+          <p class="sub" style="margin:0">Who can reach this project at all. Not what they can do inside it.</p>
+        </div>
+        <button>Add people</button>
+      </div>
+      <table>
+        <thead><tr><th>Role</th><th>Members</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>Administrators</td><td>2 people</td>
+            <td><button aria-label="Remove Administrators">Remove</button></td></tr>
+          <tr><td>Developers</td><td>8 people</td>
+            <td><button aria-label="Remove Developers">Remove</button></td></tr>
+          <tr data-row="contractors"><td>Contractors</td><td>3 people</td>
+            <td><button aria-label="Remove Contractors" data-remove="contractors">Remove</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section data-screen="notifications" hidden>
+      <h1>Notifications</h1>
+      <p class="sub">Notification scheme for Payments.</p>
+    </section>
+
+    <!-- screen: permissions (read only) -->
+    <section data-screen="permissions" hidden>
+      <div class="bar">
+        <div>
+          <h1>Permissions</h1>
+          <p class="sub" style="margin:0">Scheme: Default software scheme (shared by 4 projects)</p>
+        </div>
+        <div class="menu">
+          <button data-menu-toggle aria-expanded="false" aria-haspopup="true">Actions</button>
+          <ul role="menu" hidden>
+            <li><button role="menuitem" data-nav="edit-permissions">Edit permissions</button></li>
+            <li><button role="menuitem">Use a different scheme</button></li>
+            <li><button role="menuitem">Copy scheme</button></li>
+          </ul>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>Permission</th><th>Developers</th><th>Contractors</th></tr></thead>
+        <tbody>
+          <tr><td>Browse projects</td><td class="yes">Yes</td><td class="yes" data-cell="browse-contractors">Yes</td></tr>
+          <tr><td>Edit issues</td><td class="yes">Yes</td><td class="yes" data-cell="edit-contractors">Yes</td></tr>
+          <tr><td>Delete issues</td><td class="yes">Yes</td><td class="no">No</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- screen: edit-permissions -->
+    <section data-screen="edit-permissions" hidden>
+      <h1>Edit permissions</h1>
+      <p class="sub">Default software scheme. Changes here affect every project using this scheme.</p>
+      <table>
+        <thead><tr><th>Permission</th><th>Developers</th><th>Contractors</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Browse projects</td>
+            <td><input type="checkbox" checked aria-label="Browse projects for Developers"></td>
+            <td><input type="checkbox" checked aria-label="Browse projects for Contractors"></td>
+          </tr>
+          <tr>
+            <td>Edit issues</td>
+            <td><input type="checkbox" checked aria-label="Edit issues for Developers"></td>
+            <td><input type="checkbox" checked aria-label="Edit issues for Contractors" data-target="edit-contractors"></td>
+          </tr>
+          <tr>
+            <td>Delete issues</td>
+            <td><input type="checkbox" checked aria-label="Delete issues for Developers"></td>
+            <td><input type="checkbox" aria-label="Delete issues for Contractors"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<script>
+  function show(name) {
+    document.querySelectorAll('[data-screen]').forEach((s) => {
+      s.hidden = s.getAttribute('data-screen') !== name;
+    });
+    document.querySelectorAll('.rail a').forEach((a) => {
+      a.toggleAttribute('aria-current', a.getAttribute('data-nav') === name);
+      if (a.getAttribute('data-nav') === name) a.setAttribute('aria-current', 'page');
+    });
+    closeMenu();
+  }
+  function closeMenu() {
+    const t = document.querySelector('[data-menu-toggle]');
+    if (!t) return;
+    t.setAttribute('aria-expanded', 'false');
+    t.parentElement.querySelector('ul').hidden = true;
+  }
+  document.addEventListener('click', (e) => {
+    const nav = e.target.closest('[data-nav]');
+    if (nav) { e.preventDefault(); show(nav.getAttribute('data-nav')); return; }
+    const toggle = e.target.closest('[data-menu-toggle]');
+    if (toggle) {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      toggle.parentElement.querySelector('ul').hidden = open;
+      return;
+    }
+    closeMenu();
+  });
+  /* removing a role from Access drops the row */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-remove]');
+    if (!btn) return;
+    const row = document.querySelector(`[data-row="${btn.getAttribute('data-remove')}"]`);
+    if (row) row.remove();
+  });
+
+  /* keep the read-only table honest when the checkbox changes */
+  document.addEventListener('change', (e) => {
+    if (e.target.getAttribute('data-target') !== 'edit-contractors') return;
+    const cell = document.querySelector('[data-cell="edit-contractors"]');
+    cell.textContent = e.target.checked ? 'Yes' : 'No';
+    cell.className = e.target.checked ? 'yes' : 'no';
+  });
+  /* ?screen=<name> starts on a given screen, so a demo or a test can begin
+     wherever it needs to without clicking through. */
+  const requested = new URLSearchParams(location.search).get('screen');
+  show(document.querySelector(`[data-screen="${requested}"]`) ? requested : 'project');
+</script>
+
+<script src="../core/redact.js"></script>
+<script src="../core/screencheck.js"></script>
+<script src="../core/observer.js"></script>
+<script src="../core/target.js"></script>
+<script src="../core/highlighter.js"></script>
+<script src="../core/executor.js"></script>
+<script src="../core/recorder.js"></script>
+<script src="../core/page-agent.js"></script>
+</body>
+</html>
