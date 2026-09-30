@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Local environment and secrets
+.env
+.env*.local
+
+# Local data: the service database and early-access signups
+service/data/
+site/.data/
+
+# Logs
+*.log
+
+# OS and editors
+.DS_Store
+.vscode/
+.idea/
