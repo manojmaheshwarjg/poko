@@ -1,0 +1,16 @@
+{
+  "name": "@sekva/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Sekva's embeddable script: page-agent's engine under Sekva's approval gate, map and panel.",
+  "dependencies": {
+    "@page-agent/core": "1.12.4",
+    "@page-agent/llms": "1.12.4",
+    "@page-agent/page-controller": "1.12.4",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}
